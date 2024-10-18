@@ -47,13 +47,16 @@ bool CircularAlfven::initialize(void) {
    creal gamma = 5.0 / 3.0;
    creal mu0 = physicalconstants::MU_0;
 
+   // Ref Values computed from: B, T, lambda,
    // Three reference values: BRef, nRef, mRef=m
+   // Calculate reference values
+
    // All other reference values can be derived.
+   Real nRef = density / m;
    lRef = sqrt(m / (mu0 * nRef)) / e;
-   uRef = BRef / sqrt(mu0 * m * nRef);
+   uRef = B / sqrt(mu0 * m * nRef);
    tRef = lRef / uRef;
-   pRef = m * nRef * sqr(uRef);
-   TRef = pRef / (kB * nRef);
+   pRef = density * kB * T;
 
    cosalpha = cos(alpha);
    sinalpha = sin(alpha);
@@ -72,7 +75,7 @@ bool CircularAlfven::initialize(void) {
    if (verbose) {
       int myRank;
       MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
-      if (myRank == MASTER_RANK) {
+      if (myRank == MASTER_RANK) {  
          if (P::ohmHallTerm == 0){
             std::cerr << "The Hall term is needed for accurate Alfven waves!";
          }
@@ -122,14 +125,11 @@ void CircularAlfven::addParameters() {
    typedef Readparameters RP;
 
    RP::add("CircularAlfven.v1", "Perturbation velocity amplitude", 0.1);
-   RP::add("CircularAlfven.lambda", "Dimensionless wavelength", 32.0);
-   RP::add("CircularAlfven.rho0", "Dimensionless density", 1.0);
-   RP::add("CircularAlfven.p0", "Dimensionless pressure", 0.1);
-   RP::add("CircularAlfven.Bkpar0", "Dimensionless parallel magnetic field to wave vector", 1.0);
+   RP::add("CircularAlfven.lambda", "Wavelength in meters", 30.0);
+   RP::add("CircularAlfven.density", "Density in kg/m^3", 1.67262192e-21);
+   RP::add("CircularAlfven.T", "Temperature in Kelvin", 100000.0);
+   RP::add("CircularAlfven.B", "Magnetic field strength in Tesla", 1e-8);
    RP::add("CircularAlfven.alpha", "In-plane wave vector tilted angle w.r.t. +x in radian", 0.4636476090008061);
-   // SI units inputs
-   RP::add("CircularAlfven.BRef", "Reference magnetic field strength", 1e-8);
-   RP::add("CircularAlfven.nRef", "Reference number density", 1e6);
    RP::add("CircularAlfven.verbose", "Turn on/off detailed information", 0);
 }
 
@@ -140,11 +140,9 @@ void CircularAlfven::getParameters() {
    RP::get("CircularAlfven.v1", v1);
    RP::get("CircularAlfven.lambda", lambda);
    RP::get("CircularAlfven.alpha", alpha);
-   RP::get("CircularAlfven.rho0", rho0);
-   RP::get("CircularAlfven.p0", p0);
-   RP::get("CircularAlfven.Bkpar0", Bkpar0);
-   RP::get("CircularAlfven.BRef", BRef);
-   RP::get("CircularAlfven.nRef", nRef);
+   RP::get("CircularAlfven.density", density);
+   RP::get("CircularAlfven.T", T);
+   RP::get("CircularAlfven.B", B);
    RP::get("CircularAlfven.verbose", verbose);
 }
 
