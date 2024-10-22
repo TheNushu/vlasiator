@@ -48,9 +48,9 @@ protected:
    virtual void calcCellParameters(spatial_cell::SpatialCell* cell, creal& t);
    virtual std::vector<std::array<Real, 3>> getV0(creal x, creal y, creal z, const uint popID) const;
 
-   Real density, T, B, v1, B1;
-   Real lRef, tRef, uRef, pRef;
-   Real kwave, lambda, alpha, cosalpha, sinalpha;
+   Real density, T, B, lambda;
+   Real v1, B1;
+   Real kwave, alpha, cosalpha, sinalpha;
    bool verbose;
 }; // class CircularAlfven
 } // namespace projects
