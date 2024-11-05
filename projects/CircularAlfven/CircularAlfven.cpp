@@ -41,89 +41,89 @@ CircularAlfven::~CircularAlfven() {}
 bool CircularAlfven::initialize(void) {
    bool success = Project::initialize();
 
+   // Physical constants
    creal m = physicalconstants::MASS_PROTON;
    creal e = physicalconstants::CHARGE;
    creal kB = physicalconstants::K_B;
-   creal gamma = 5.0 / 3.0;
    creal mu0 = physicalconstants::MU_0;
 
    cosalpha = cos(alpha);
    sinalpha = sin(alpha);
 
-   kwave = 2 * M_PI / lambda;
-   // Alfven speed
-   creal VA = B / sqrt(mu0 * density);
-   // Magnetic field perturbation amplitude
-   B1 = v1 * B / VA;
+   // Define reference values based on physical inputs
+   lRef = sqrt(m / (mu0 * rho0)) / e;
+   uRef = Bkpar0 / sqrt(mu0 * m * rho0);
+   tRef = lRef / uRef;
+   pRef = m * rho0 * sqr(uRef); 
+   TRef = pRef / (kB * rho0); 
 
-   if (verbose) {
+   // Convert physical inputs to dimensionless quantities
+   rho0 *= m;       // Density in kg/m^3
+   p0 = kB * T0;    // Dimensionless pressure
+   Bkpar0 /= BRef;  // Magnetic field in Tesla (to dimensionless)
+   v1 /= uRef;      // Perturbation speed (to dimensionless)
+
+   // Dimensionless wave vector
+   kwave = 2 * M_PI / (lambda / lRef);
+
+   // Alfven speed in dimensionless units
+   creal VA = Bkpar0 / sqrt(mu0 * rho0);
+   B1 = v1 * Bkpar0 / VA; // Magnetic field perturbation amplitude
+
+    if (verbose) {
       int myRank;
       MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
       if (myRank == MASTER_RANK) {
-        
-        if (P::ohmHallTerm == 0) {
-           std::cerr << "The Hall term is needed for accurate Alfven waves!";
-        }
-
-        std::cout << "wavelength = " << lambda << " [m]\n";
-        std::cout << "VA = " << VA << "\n";
-        std::cout << "velocity perturbation amplitude = " << v1 << "\n";
-        std::cout << "magnetic perturbation amplitude = " << B1 << "\n";
-        std::cout << "angle = " << alpha / M_PI * 180 << " [degree]\n";
-        std::cout << "-------------------------------------------------\n";
-         creal Lx = P::xmax - P::xmin;
-        // Useful for setting the Vspace ~ 10*Vth width
-        // Is Vth computed correctly? Should it use particleSpecies[0].mass or m from proton mass?
-        Real Vth = sqrt(2 * physicalconstants::K_B * T / getObjectWrapper().particleSpecies[0].mass);
-        std::cout << "Vth: " << Vth << " [m/s]\n";
-        const vmesh::MeshParameters& mp = getObjectWrapper().velocityMeshes[0];
-        Real dvx = (mp.meshLimits[1] - mp.meshLimits[0]) / (mp.gridLength[0] * mp.blockLength[0]);
-        std::cout << "Vmax:" << mp.meshLimits[1] << "\n";
-        std::cout << "Vmin:" << mp.meshLimits[0] << "\n";
-        std::cout << "nvcells:" << mp.gridLength[0] * mp.blockLength[0] << "\n";
-        std::cout << "dvx = " << dvx << " [m/s]\n";
-        std::cout << "Vth/dvx = " << Vth / dvx << "\n";
-        std::cout << "Vmax/Vth = " << mp.meshLimits[1] / Vth << "\n";
-        if (10 * dvx > Vth) {
-        std::cout << "vmesh maybe too coarse!\n";
-        }
-        if (5 * Vth > mp.meshLimits[1]) {
-        std::cout << "vmesh extent maybe too small!\n";
-        }
-        std::cout << "------------------------------------------------\n";
-
+         if (P::ohmHallTerm == 0){
+            std::cerr << "The Hall term is needed for accurate Alfven waves!";
+         }
+         std::cout << "wavelength = " << lambda << " [m]\n";
+         std::cout << "Lx / lRef = " << (P::xmax - P::xmin) / lRef << "\n";
+         std::cout << "VA = " << VA * uRef << " [m/s]\n";
+         std::cout << "velocity perturbation amplitude = " << v1 * uRef << " [m/s]\n";
+         std::cout << "magnetic perturbation amplitude = " << B1 * BRef << " [T]\n";
+         std::cout << "angle = " << alpha / 3.1415926 * 180 << " [degree]\n";
+         std::cout << "-------------------------------------------------\n";
+         std::cout << "Unit conversion factors from dimensionless to SI:\n";
+         std::cout << "lRef: " << lRef << " [m]\n";
+         std::cout << "tRef: " << tRef << " [s]\n";
+         std::cout << "vRef: " << uRef << " [m/s]\n";
+         std::cout << "nRef: " << rho0 / m << " [#/m^3]\n";
+         std::cout << "TRef: " << TRef << " [K]\n";
+         std::cout << "pRef: " << pRef << " [Pa]\n";
+         std::cout << "BRef: " << BRef << " [T]\n";
+         std::cout << "-------------------------------------------------\n";
       }
    }
-
    return success;
 }
 
 void CircularAlfven::addParameters() {
    typedef Readparameters RP;
 
-   RP::add("CircularAlfven.v1", "Perturbation velocity amplitude", 0.1);
-   RP::add("CircularAlfven.lambda", "Wavelength in meters", 7.288782342808783e6);
-   RP::add("CircularAlfven.density", "Density in kg/m^3", 1.67262192e-21);
-   RP::add("CircularAlfven.T", "Temperature in Kelvin", 100000.0);
-   RP::add("CircularAlfven.B", "Magnetic field strength in Tesla", 1e-8);
-   // in Previous code was 0.4636476090008061, now is 0.0
-   RP::add("CircularAlfven.alpha", "In-plane wave vector tilted angle w.r.t. +x in radian", 0.0);
+   // Add parameters with physical units
+   RP::add("CircularAlfven.v1", "Initial perturbation velocity in m/s", 0.1);
+   RP::add("CircularAlfven.lambda", "Wavelength in meters", 32.0);
+   RP::add("CircularAlfven.rho0", "Density in particles per cubic meter", 1.0e6);
+   RP::add("CircularAlfven.T0", "Temperature in Kelvin", 1e5);
+   RP::add("CircularAlfven.Bkpar0", "Parallel magnetic field strength in Tesla", 1e-8);
+   RP::add("CircularAlfven.alpha", "Wave vector angle w.r.t. +x in radians", 0.4636476090008061);
    RP::add("CircularAlfven.verbose", "Turn on/off detailed information", 0);
 }
-
 
 void CircularAlfven::getParameters() {
    Project::getParameters();
 
    typedef Readparameters RP;
-   RP::get("CircularAlfven.v1", v1);
-   RP::get("CircularAlfven.lambda", lambda);
-   RP::get("CircularAlfven.alpha", alpha);
-   RP::get("CircularAlfven.density", density);
-   RP::get("CircularAlfven.T", T);
-   RP::get("CircularAlfven.B", B);
+   RP::get("CircularAlfven.v1", v1);          // Initial perturbation speed in m/s
+   RP::get("CircularAlfven.lambda", lambda);  // Wavelength in meters
+   RP::get("CircularAlfven.alpha", alpha);    // Angle in radians
+   RP::get("CircularAlfven.rho0", rho0);      // Density in particles/m^3
+   RP::get("CircularAlfven.T0", T0);          // Temperature in Kelvin
+   RP::get("CircularAlfven.Bkpar0", Bkpar0);  // Magnetic field in Tesla
    RP::get("CircularAlfven.verbose", verbose);
 }
+
 
 Real CircularAlfven::getMaxwellian(creal& x, creal& y, creal& z, creal& vx, creal& vy, creal& vz, creal& dvx,
                                    creal& dvy, creal& dvz, const uint popID) const {
