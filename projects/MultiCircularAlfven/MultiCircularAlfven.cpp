@@ -55,10 +55,6 @@ bool MultiCircularAlfven::initialize(void) {
    sinalpha = sin(alpha);
    // wave vector
 
-   // see if you still need it, they mentioned that they want 
-   // to shift the responsibility of wave being periodic
-   // to the user
-   // is this where this should happen?
    kwave = 2 * M_PI / lambda;
    // Alfven speed
    creal VA = B / sqrt(mu0 * rho0); 
@@ -143,13 +139,17 @@ Real MultiCircularAlfven::getMaxwellian(creal& x, creal& y, creal& z, creal& vx,
    creal kB = physicalconstants::K_B;
 
    Real xpar = x * cosalpha + y * sinalpha;
-   Real uperp = v1 * sin(kwave * xpar);
-   Real ux, uy, uz;
+   //phase1 initially 0, but can be changed if wanted to
+   Real uperp1 = v1 * sin(kwave * xpar + phase1); 
+   Real uz1 = v1 * cos(kwave * xpar + phase1);
 
-   ux = -uperp * sinalpha;
-   uy = uperp * cosalpha;
-   uz = v1 * cos(kwave * xpar);
-   //is this okay?
+   Real uperp2 = -v1 * sin(kwave * xpar + phase2);
+   Real uz2 = -v1 * cos(kwave * xpar + phase2);
+
+   Real ux = (-uperp1 * sinalpha) + (-uperp2 * sinalpha);
+   Real uy = (uperp1 * cosalpha) + (uperp2 * cosalpha);
+   Real uz = uz1 + uz2;
+   
    creal coef = m / (2 * M_PI * kB * T);
    creal f = n * sqrt(coef) * coef * exp(-coef * M_PI * (sqr(vx - ux) + sqr(vy - uy) + sqr(vz - uz)));
 
@@ -194,10 +194,22 @@ void MultiCircularAlfven::setProjectBField(FsGrid<std::array<Real, fsgrids::bfie
                const std::array<Real, 3> x = perBGrid.getPhysicalCoords(i, j, k);
                std::array<Real, fsgrids::bfield::N_BFIELD>* cell = perBGrid.get(i, j, k);
                Real xpar = x[0] * cosalpha + x[1] * sinalpha;
-               Real Bperp = B1 * sin(kwave * xpar);
-               cell->at(fsgrids::bfield::PERBX) = -Bperp * sinalpha;
-               cell->at(fsgrids::bfield::PERBY) = Bperp * cosalpha;
-               cell->at(fsgrids::bfield::PERBZ) = B1 * cos(kwave * xpar);
+               
+               Real Bperp1 = B1 * sin(kwave * xpar + phase1);
+               Real Bperp2 = B1 * sin(kwave * xpar + phase2);
+
+               Real Bx1 = (-Bperp1 * sinalpha);
+               Real Bx2 = (-Bperp2 * sinalpha);
+
+               Real By1 = Bperp1 * cosalpha;
+               Real By2 = Bperp2 * cosalpha;
+
+               Real Bz1 = B1 * cos(kwave * xpar + phase1);
+               Real Bz2 = B1 * cos(kwave * xpar + phase2);
+
+               cell->at(fsgrids::bfield::PERBX) = Bx1 + Bx2;
+               cell->at(fsgrids::bfield::PERBY) = By1 + By2;
+               cell->at(fsgrids::bfield::PERBZ) = Bz1 + Bz2;
             }
          }
       }

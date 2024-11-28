@@ -51,6 +51,8 @@ protected:
    Real rho0, p0, Bkpar0, v1, B, T, B1;
    Real n, lRef, tRef, uRef, psi, TRef;
    Real kwave, lambda, alpha, cosalpha, sinalpha;
+   static constexpr Real phase1 = 0.0;
+   static constexpr Real phase2 = M_PI/2.0;
    bool verbose;
 }; // class MultiCircularAlfven
 } // namespace projects
