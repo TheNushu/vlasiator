@@ -30,15 +30,15 @@
 #include "../../object_wrapper.h"
 #include "../../readparameters.h"
 
-#include "CircularAlfven.h"
+#include "MultiCircularAlfven.h"
 
 using namespace spatial_cell;
 
 namespace projects {
-CircularAlfven::CircularAlfven() : TriAxisSearch() {}
-CircularAlfven::~CircularAlfven() {}
+MultiCircularAlfven::MultiCircularAlfven() : TriAxisSearch() {}
+MultiCircularAlfven::~MultiCircularAlfven() {}
 
-bool CircularAlfven::initialize(void) {
+bool MultiCircularAlfven::initialize(void) {
    bool success = Project::initialize();
 
    creal m = physicalconstants::MASS_PROTON;
@@ -109,35 +109,35 @@ bool CircularAlfven::initialize(void) {
 }
 
 
-void CircularAlfven::addParameters() {
+void MultiCircularAlfven::addParameters() {
    typedef Readparameters RP;
 
    // Define all parameters with SI units directly
-   RP::add("CircularAlfven.v1", "Perturbation velocity amplitude (m/s)", 0.1);
-   RP::add("CircularAlfven.lambda", "Wavelength (m)", 32.0);
-   RP::add("CircularAlfven.rho0", "Density (kg/m^3)", 1.6726219e-21);
-   RP::add("CircularAlfven.p0", "Pressure (Pa)", 0.1);
-   RP::add("CircularAlfven.B", "Magnetic field strength (T)", 1e-8);
-   RP::add("CircularAlfven.alpha", "Wave vector angle (radians)", 0.4636476090008061);
-   RP::add("CircularAlfven.T", "Temperature (K)", 1e6);  // Example temperature
-   RP::add("CircularAlfven.verbose", "Verbose output", 1);
+   RP::add("MultiCircularAlfven.v1", "Perturbation velocity amplitude (m/s)", 0.1);
+   RP::add("MultiCircularAlfven.lambda", "Wavelength (m)", 32.0);
+   RP::add("MultiCircularAlfven.rho0", "Density (kg/m^3)", 1.6726219e-21);
+   RP::add("MultiCircularAlfven.p0", "Pressure (Pa)", 0.1);
+   RP::add("MultiCircularAlfven.B", "Magnetic field strength (T)", 1e-8);
+   RP::add("MultiCircularAlfven.alpha", "Wave vector angle (radians)", 0.4636476090008061);
+   RP::add("MultiCircularAlfven.T", "Temperature (K)", 1e6);  // Example temperature
+   RP::add("MultiCircularAlfven.verbose", "Verbose output", 1);
 }
 
-void CircularAlfven::getParameters() {
+void MultiCircularAlfven::getParameters() {
    Project::getParameters();
 
    typedef Readparameters RP;
-   RP::get("CircularAlfven.v1", v1);
-   RP::get("CircularAlfven.lambda", lambda);
-   RP::get("CircularAlfven.alpha", alpha);
-   RP::get("CircularAlfven.rho0", rho0);
-   RP::get("CircularAlfven.p0", p0);
-   RP::get("CircularAlfven.B", B);
-   RP::get("CircularAlfven.T", T);
-   RP::get("CircularAlfven.verbose", verbose);
+   RP::get("MultiCircularAlfven.v1", v1);
+   RP::get("MultiCircularAlfven.lambda", lambda);
+   RP::get("MultiCircularAlfven.alpha", alpha);
+   RP::get("MultiCircularAlfven.rho0", rho0);
+   RP::get("MultiCircularAlfven.p0", p0);
+   RP::get("MultiCircularAlfven.B", B);
+   RP::get("MultiCircularAlfven.T", T);
+   RP::get("MultiCircularAlfven.verbose", verbose);
 }
 
-Real CircularAlfven::getMaxwellian(creal& x, creal& y, creal& z, creal& vx, creal& vy, creal& vz, creal& dvx,
+Real MultiCircularAlfven::getMaxwellian(creal& x, creal& y, creal& z, creal& vx, creal& vy, creal& vz, creal& dvx,
                                    creal& dvy, creal& dvz, const uint popID) const {
    creal m = getObjectWrapper().particleSpecies[popID].mass;
    creal kB = physicalconstants::K_B;
@@ -157,7 +157,7 @@ Real CircularAlfven::getMaxwellian(creal& x, creal& y, creal& z, creal& vx, crea
 }
 
 
-Real CircularAlfven::calcPhaseSpaceDensity(creal& x, creal& y, creal& z, creal& dx, creal& dy, creal& dz, creal& vx,
+Real MultiCircularAlfven::calcPhaseSpaceDensity(creal& x, creal& y, creal& z, creal& dx, creal& dy, creal& dz, creal& vx,
                                            creal& vy, creal& vz, creal& dvx, creal& dvy, creal& dvz,
                                            const uint popID) const {
    Real f = 0.0;
@@ -167,16 +167,16 @@ Real CircularAlfven::calcPhaseSpaceDensity(creal& x, creal& y, creal& z, creal& 
    return f;
 }
 
-std::vector<std::array<Real, 3>> CircularAlfven::getV0(creal x, creal y, creal z, const uint popID) const {
+std::vector<std::array<Real, 3>> MultiCircularAlfven::getV0(creal x, creal y, creal z, const uint popID) const {
    std::vector<std::array<Real, 3>> V0;
    std::array<Real, 3> v = {{0.0, 0.0, 0.0}};
    V0.push_back(v);
    return V0;
 }
 
-void CircularAlfven::calcCellParameters(spatial_cell::SpatialCell* cell, creal& t) {}
+void MultiCircularAlfven::calcCellParameters(spatial_cell::SpatialCell* cell, creal& t) {}
 
-void CircularAlfven::setProjectBField(FsGrid<std::array<Real, fsgrids::bfield::N_BFIELD>, FS_STENCIL_WIDTH>& perBGrid,
+void MultiCircularAlfven::setProjectBField(FsGrid<std::array<Real, fsgrids::bfield::N_BFIELD>, FS_STENCIL_WIDTH>& perBGrid,
                                       FsGrid<std::array<Real, fsgrids::bgbfield::N_BGB>, FS_STENCIL_WIDTH>& BgBGrid,
                                       FsGrid<fsgrids::technical, FS_STENCIL_WIDTH>& technicalGrid) {
    // Background field

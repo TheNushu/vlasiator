@@ -20,18 +20,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef CIRCULARALFVEN_H
-#define CIRCULARALFVEN_H
+#ifndef MULTICIRCULARALFVEN_H
+#define MULTICIRCULARALFVEN_H
 
 #include "../../definitions.h"
 #include "../projectTriAxisSearch.h"
 
 namespace projects {
 
-class CircularAlfven : public TriAxisSearch {
+class MultiCircularAlfven : public TriAxisSearch {
 public:
-   CircularAlfven();
-   virtual ~CircularAlfven();
+   MultiCircularAlfven();
+   virtual ~MultiCircularAlfven();
 
    virtual bool initialize(void);
    static void addParameters(void);
@@ -52,7 +52,7 @@ protected:
    Real n, lRef, tRef, uRef, psi, TRef;
    Real kwave, lambda, alpha, cosalpha, sinalpha;
    bool verbose;
-}; // class CircularAlfven
+}; // class MultiCircularAlfven
 } // namespace projects
 
 #endif
