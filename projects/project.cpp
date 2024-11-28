@@ -30,6 +30,7 @@
 #include "../object_wrapper.h"
 
 #include "Alfven/Alfven.h"
+#include "CircularAlfven/CircularAlfven.h"
 #include "Diffusion/Diffusion.h"
 #include "Dispersion/Dispersion.h"
 #include "Distributions/Distributions.h"
@@ -104,6 +105,7 @@ namespace projects {
       typedef Readparameters RP;
       // TODO add all projects' static addParameters() functions here.
       projects::Alfven::addParameters();
+      projects::CircularAlfven::addParameters();
       projects::Diffusion::addParameters();
       projects::Dispersion::addParameters();
       projects::Distributions::addParameters();
@@ -741,6 +743,9 @@ Project* createProject() {
    }
    if(Parameters::projectName == "Alfven") {
       rvalue = new projects::Alfven;
+   }
+   if(Parameters::projectName == "CircularAlfven"){
+      rvalue = new projects::CircularAlfven;
    }
    if(Parameters::projectName == "Diffusion") {
       rvalue = new projects::Diffusion;
