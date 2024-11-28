@@ -31,6 +31,7 @@
 
 #include "Alfven/Alfven.h"
 #include "CircularAlfven/CircularAlfven.h"
+#include "MultiCircularAlfven/MultiCircularAlfven.h"
 #include "Diffusion/Diffusion.h"
 #include "Dispersion/Dispersion.h"
 #include "Distributions/Distributions.h"
@@ -106,6 +107,7 @@ namespace projects {
       // TODO add all projects' static addParameters() functions here.
       projects::Alfven::addParameters();
       projects::CircularAlfven::addParameters();
+      projects::MultiCircularAlfven::addParameters();
       projects::Diffusion::addParameters();
       projects::Dispersion::addParameters();
       projects::Distributions::addParameters();
@@ -746,6 +748,9 @@ Project* createProject() {
    }
    if(Parameters::projectName == "CircularAlfven"){
       rvalue = new projects::CircularAlfven;
+   }
+   if(Parameters::projectName == "MultiCircularAlfven"){
+      rvalue = new projects::MultiCircularAlfven;
    }
    if(Parameters::projectName == "Diffusion") {
       rvalue = new projects::Diffusion;
