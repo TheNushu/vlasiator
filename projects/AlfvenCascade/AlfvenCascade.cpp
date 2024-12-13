@@ -102,11 +102,17 @@ bool AlfvenCascade::initialize(void) {
 void AlfvenCascade::addParameters() {
    typedef Readparameters RP;
    
+   // For vectors, we need to use std::vector for the default << values
+   std::vector<Real> defaultWavelengths = {32.0};
+   std::vector<Real> defaultAmplitudes = {0.1};
+   std::vector<Real> defaultPhases = {0.0};
+   std::vector<Real> defaultAngles = {0.4636476090008061};
+   
    RP::add("AlfvenCascade.numberOfWaves", "Number of waves in the simulation", 1);
-   RP::add("AlfvenCascade.wavelengths", "Vector of wavelengths (m)", {32.0});
-   RP::add("AlfvenCascade.amplitudes", "Vector of velocity amplitudes (m/s)", {0.1});
-   RP::add("AlfvenCascade.phases", "Vector of initial phases (rad)", {0.0});
-   RP::add("AlfvenCascade.angles", "Vector of wave angles (rad)", {0.4636476090008061});
+   RP::add("AlfvenCascade.wavelengths", "Vector of wavelengths (m)", defaultWavelengths);
+   RP::add("AlfvenCascade.amplitudes", "Vector of velocity amplitudes (m/s)", defaultAmplitudes);
+   RP::add("AlfvenCascade.phases", "Vector of initial phases (rad)", defaultPhases);
+   RP::add("AlfvenCascade.angles", "Vector of wave angles (rad)", defaultAngles);
    RP::add("AlfvenCascade.rho0", "Background density (kg/m^3)", 1.6726219e-21);
    RP::add("AlfvenCascade.B", "Background magnetic field strength (T)", 1e-8);
    RP::add("AlfvenCascade.T", "Temperature (K)", 1e6);
@@ -187,7 +193,8 @@ void AlfvenCascade::setProjectBField(FsGrid<std::array<Real, fsgrids::bfield::N_
                    Real sinalpha = sin(wave.angle);
                    Real kwave = 2 * M_PI / wave.wavelength;
                    Real xpar = x[0] * cosalpha + x[1] * sinalpha;
-                   
+                   creal mu0 = physicalconstants::MU_0;
+
                    // Calculate B1 from v1 using Alfvén wave relation
                    Real B1 = wave.amplitude * sqrt(mu0 * rho0);
                    
