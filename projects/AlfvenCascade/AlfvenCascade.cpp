@@ -65,7 +65,7 @@ bool AlfvenCascade::initialize(void) {
 
    // Initialize waves based on parameters
    waves.clear();
-   for (size_t i = 1; i <= wavelengths.size(); i++) {
+   for (size_t i = 1; i <= wavelengths.size() + 1; i++) {
        WaveParameters wave;
        wave.wavelength = wavelengths[i];
        wave.amplitude = amplitudes[i];
@@ -150,20 +150,20 @@ void AlfvenCascade::getParameters() {
    RP::get("AlfvenCascade.wavelength1", phase1);
    RP::get("AlfvenCascade.wavelength1", angle1);
 
-   RP::get("AlfvenCascade.wavelength1", wavelength2);
-   RP::get("AlfvenCascade.wavelength1", amplitude2);
-   RP::get("AlfvenCascade.wavelength1", phase2);
-   RP::get("AlfvenCascade.wavelength1", angle2);
+   RP::get("AlfvenCascade.wavelength2", wavelength2);
+   RP::get("AlfvenCascade.wavelength2", amplitude2);
+   RP::get("AlfvenCascade.wavelength2", phase2);
+   RP::get("AlfvenCascade.wavelength2", angle2);
 
-   RP::get("AlfvenCascade.wavelength1", wavelength3);
-   RP::get("AlfvenCascade.wavelength1", amplitude3);
-   RP::get("AlfvenCascade.wavelength1", phase3);
-   RP::get("AlfvenCascade.wavelength1", angle3);
+   RP::get("AlfvenCascade.wavelength3", wavelength3);
+   RP::get("AlfvenCascade.wavelength3", amplitude3);
+   RP::get("AlfvenCascade.wavelength3", phase3);
+   RP::get("AlfvenCascade.wavelength3", angle3);
 
-   RP::get("AlfvenCascade.wavelength1", wavelength4);
-   RP::get("AlfvenCascade.wavelength1", amplitude4);
-   RP::get("AlfvenCascade.wavelength1", phase4);
-   RP::get("AlfvenCascade.wavelength1", angle4);
+   RP::get("AlfvenCascade.wavelength4", wavelength4);
+   RP::get("AlfvenCascade.wavelength4", amplitude4);
+   RP::get("AlfvenCascade.wavelength4", phase4);
+   RP::get("AlfvenCascade.wavelength4", angle4);
 
    // (currently not working) Read each parameter multiple times
    /*
@@ -196,7 +196,7 @@ void AlfvenCascade::getParameters() {
    RP::get("AlfvenCascade.rho0", rho0);
    RP::get("AlfvenCascade.B", B);
    RP::get("AlfvenCascade.T", T);
-   RP::get("AlfvenCascade.spectralIndex", spectralIndex);
+   RP::get("AlfvenCascade.spectralIndex", spectralIndex)2
    RP::get("AlfvenCascade.randomSeed", randomSeed);
    RP::get("AlfvenCascade.verbose", verbose);
 }
