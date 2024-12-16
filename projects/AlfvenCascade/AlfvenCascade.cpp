@@ -146,29 +146,30 @@ void AlfvenCascade::getParameters() {
    angles.clear();
 
    // Read each parameter multiple times
+   
    Real value;
    for (int i = 1; i <= nWaves; i++) {
-      std::string wavelengthParam = "AlfvenCascade.wavelength" + std::to_string(i);
-      std::string amplitudeParam = "AlfvenCascade.amplitude" + std::to_string(i);
-      std::string phaseParam = "AlfvenCascade.phase" + std::to_string(i);
-      std::string angleParam = "AlfvenCascade.angle" + std::to_string(i);
+      std::string wavelengthParam = "wavelength" + std::to_string(i);
+      std::string amplitudeParam = "amplitude" + std::to_string(i);
+      std::string phaseParam = "phase" + std::to_string(i);
+      std::string angleParam = "angle" + std::to_string(i);
 
       std::cout << wavelengthParam << "\n";
       std::cout << amplitudeParam << "\n";
       std::cout << phaseParam << "\n";
       std::cout << angleParam << "\n";
 
-      RP::get(wavelengthParam, value);
-      wavelengths.push_back(value);
+      RP::get("AlfvenCascade." + wavelengthParam, wavelengthParam);
+      wavelengths.push_back(wavelengthParam);
       
-      RP::get(amplitudeParam, value);
-      amplitudes.push_back(value);
+      RP::get("AlfvenCascade." + amplitudeParam, amplitudeParam);
+      amplitudes.push_back(amplitudeParam);
       
-      RP::get(phaseParam, value);
-      phases.push_back(value);
+      RP::get("AlfvenCascade." + phaseParam, phaseParam);
+      phases.push_back(phaseParam);
       
-      RP::get(angleParam, value);
-      angles.push_back(value);
+      RP::get("AlfvenCascade." + angleParam, angleParam);
+      angles.push_back(angleParam);
    }
 
    // Get scalar parameters
