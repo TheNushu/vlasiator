@@ -62,7 +62,7 @@ bool AlfvenCascade::initialize(void) {
 
    n = rho0 / m; // number density
    p0 = n * kB * T; // pressure
-   
+
    // Initialize waves based on parameters
    waves.clear();
    for (size_t i = 1; i <= wavelengths.size(); i++) {
@@ -145,7 +145,6 @@ void AlfvenCascade::getParameters() {
    phases.clear();
    angles.clear();
 
-
    RP::get("AlfvenCascade.wavelength1", wavelength1);
    RP::get("AlfvenCascade.wavelength1", amplitude1);
    RP::get("AlfvenCascade.wavelength1", phase1);
@@ -166,7 +165,7 @@ void AlfvenCascade::getParameters() {
    RP::get("AlfvenCascade.wavelength1", phase4);
    RP::get("AlfvenCascade.wavelength1", angle4);
 
-   // (currently not working) Read each parameter multiple times 
+   // (currently not working) Read each parameter multiple times
    /*
    Real value;
    for (int i = 1; i <= nWaves; i++) {
@@ -182,7 +181,7 @@ void AlfvenCascade::getParameters() {
 
       RP::get("AlfvenCascade." + wavelengthParam, value);
       wavelengths.push_back(value);
-      
+
       RP::get("AlfvenCascade." + amplitudeParam, value);
       amplitudes.push_back(value);
       
@@ -202,14 +201,14 @@ void AlfvenCascade::getParameters() {
    RP::get("AlfvenCascade.verbose", verbose);
 }
 
-Real AlfvenCascade::getMaxwellian(creal& x, creal& y, creal& z, creal& vx, creal& vy, creal& vz, 
+Real AlfvenCascade::getMaxwellian(creal& x, creal& y, creal& z, creal& vx, creal& vy, creal& vz,
                                  creal& dvx, creal& dvy, creal& dvz, const uint popID) const {
    creal m = getObjectWrapper().particleSpecies[popID].mass;
    creal kB = physicalconstants::K_B;
 
    // Calculate total perturbation velocity from all waves
    Real ux = 0.0, uy = 0.0, uz = 0.0;
-   
+
    for (const auto& wave : waves) {
        Real cosalpha = cos(wave.angle);
        Real sinalpha = sin(wave.angle);
@@ -223,7 +222,7 @@ Real AlfvenCascade::getMaxwellian(creal& x, creal& y, creal& z, creal& vx, creal
        uy += uperp * cosalpha;
        uz += upara;
    }
-   
+
    creal coef = m / (2 * M_PI * kB * T);
    creal f = n * sqrt(coef) * coef * exp(-coef * M_PI * (sqr(vx - ux) + sqr(vy - uy) + sqr(vz - uz)));
 
@@ -266,9 +265,9 @@ void AlfvenCascade::setProjectBField(FsGrid<std::array<Real, fsgrids::bfield::N_
             for (int k = 0; k < localSize[2]; ++k) {
                const std::array<Real, 3> x = perBGrid.getPhysicalCoords(i, j, k);
                std::array<Real, fsgrids::bfield::N_BFIELD>* cell = perBGrid.get(i, j, k);
-               
+
                Real Bx = 0.0, By = 0.0, Bz = 0.0;
-               
+
                // Sum contributions from all waves
                for (const auto& wave : waves) {
                    Real cosalpha = cos(wave.angle);
@@ -279,7 +278,7 @@ void AlfvenCascade::setProjectBField(FsGrid<std::array<Real, fsgrids::bfield::N_
 
                    // Calculate B1 from v1 using Alfvén wave relation
                    Real B1 = wave.amplitude * sqrt(mu0 * rho0);
-                   
+
                    Real Bperp = B1 * sin(kwave * xpar + wave.phase);
                    Real Bpara = B1 * cos(kwave * xpar + wave.phase);
                    
@@ -287,7 +286,7 @@ void AlfvenCascade::setProjectBField(FsGrid<std::array<Real, fsgrids::bfield::N_
                    By += Bperp * cosalpha;
                    Bz += Bpara;
                }
-               
+
                cell->at(fsgrids::bfield::PERBX) = Bx;
                cell->at(fsgrids::bfield::PERBY) = By;
                cell->at(fsgrids::bfield::PERBZ) = Bz;

@@ -29,13 +29,15 @@
 namespace projects {
 
 // Structure to hold parameters for each wave
+
+/*
 struct WaveParameters {
     Real wavelength;
     Real amplitude;
     Real phase;
     Real angle;
 };
-
+*/
 class AlfvenCascade : public TriAxisSearch {
 public:
    AlfvenCascade();
@@ -63,22 +65,22 @@ protected:
    Real p0;      // Thermal pressure
    Real n;       // Number density
    Real VA;      // Alfvén speed
-   
+
    Real wavelength1;
    Real amplitude1;
    Real phase1;
    Real angle1;
-   
+
    Real wavelength2;
    Real amplitude2;
    Real phase2;
    Real angle2;
-   
+
    Real wavelength3;
    Real amplitude3;
    Real phase3;
    Real angle3;
-   
+
    Real wavelength4;
    Real amplitude4;
    Real phase4;
@@ -91,7 +93,7 @@ protected:
    std::vector<Real> angles;       // Vector of wave angles
    Real spectralIndex;            // Power law index for initial spectrum
    int randomSeed;               // Seed for random phase generation
-   
+
    // Vector to store wave parameters
    std::vector<WaveParameters> waves;
 
