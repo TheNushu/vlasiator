@@ -146,24 +146,24 @@ void AlfvenCascade::getParameters() {
    angles.clear();
 
    RP::get("AlfvenCascade.wavelength1", wavelength1);
-   RP::get("AlfvenCascade.wavelength1", amplitude1);
-   RP::get("AlfvenCascade.wavelength1", phase1);
-   RP::get("AlfvenCascade.wavelength1", angle1);
+   RP::get("AlfvenCascade.amplitude1", amplitude1);
+   RP::get("AlfvenCascade.phase1", phase1);
+   RP::get("AlfvenCascade.angle1", angle1);
 
    RP::get("AlfvenCascade.wavelength2", wavelength2);
-   RP::get("AlfvenCascade.wavelength2", amplitude2);
-   RP::get("AlfvenCascade.wavelength2", phase2);
-   RP::get("AlfvenCascade.wavelength2", angle2);
+   RP::get("AlfvenCascade.amplitude2", amplitude2);
+   RP::get("AlfvenCascade.phase2", phase2);
+   RP::get("AlfvenCascade.angle2", angle2);
 
    RP::get("AlfvenCascade.wavelength3", wavelength3);
-   RP::get("AlfvenCascade.wavelength3", amplitude3);
-   RP::get("AlfvenCascade.wavelength3", phase3);
-   RP::get("AlfvenCascade.wavelength3", angle3);
+   RP::get("AlfvenCascade.amplitude3", amplitude3);
+   RP::get("AlfvenCascade.phase3", phase3);
+   RP::get("AlfvenCascade.angle3", angle3);
 
    RP::get("AlfvenCascade.wavelength4", wavelength4);
-   RP::get("AlfvenCascade.wavelength4", amplitude4);
-   RP::get("AlfvenCascade.wavelength4", phase4);
-   RP::get("AlfvenCascade.wavelength4", angle4);
+   RP::get("AlfvenCascade.amplitude4", amplitude4);
+   RP::get("AlfvenCascade.phase4", phase4);
+   RP::get("AlfvenCascade.angle4", angle4);
 
    // (currently not working) Read each parameter multiple times
    /*
