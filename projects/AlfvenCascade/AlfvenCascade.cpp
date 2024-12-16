@@ -196,7 +196,7 @@ void AlfvenCascade::getParameters() {
    RP::get("AlfvenCascade.rho0", rho0);
    RP::get("AlfvenCascade.B", B);
    RP::get("AlfvenCascade.T", T);
-   RP::get("AlfvenCascade.spectralIndex", spectralIndex)2
+   RP::get("AlfvenCascade.spectralIndex", spectralIndex);
    RP::get("AlfvenCascade.randomSeed", randomSeed);
    RP::get("AlfvenCascade.verbose", verbose);
 }
