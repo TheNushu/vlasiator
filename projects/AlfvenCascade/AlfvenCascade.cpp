@@ -102,12 +102,11 @@ bool AlfvenCascade::initialize(void) {
 void AlfvenCascade::addParameters() {
    typedef Readparameters RP;
    
-   // For repeated parameters, just add the base parameter once
    RP::add("AlfvenCascade.numberOfWaves", "Number of waves in the simulation", 1);
-   RP::add("AlfvenCascade.wavelength", "Wavelength of wave (m)", 32.0);
-   RP::add("AlfvenCascade.amplitude", "Velocity amplitude (m/s)", 0.1);
-   RP::add("AlfvenCascade.phase", "Initial phase (rad)", 0.0);
-   RP::add("AlfvenCascade.angle", "Wave angle (rad)", 0.4636476090008061);
+   RP::add("AlfvenCascade.wavelength1", "Wavelength of wave (m)", 32.0);
+   RP::add("AlfvenCascade.amplitude1", "Velocity amplitude (m/s)", 0.1);
+   RP::add("AlfvenCascade.phase1", "Initial phase (rad)", 0.0);
+   RP::add("AlfvenCascade.angle1", "Wave angle (rad)", 0.4636476090008061);
    
    RP::add("AlfvenCascade.rho0", "Background density (kg/m^3)", 1.6726219e-21);
    RP::add("AlfvenCascade.B", "Background magnetic field strength (T)", 1e-8);
@@ -133,16 +132,21 @@ void AlfvenCascade::getParameters() {
    // Read each parameter multiple times
    Real value;
    for (int i = 0; i < nWaves; i++) {
-      RP::get("AlfvenCascade.wavelength", value);
+      std::string wavelengthParam = "AlfvenCascade.wavelength" + std::to_string(i);
+      std::string amplitudeParam = "AlfvenCascade.amplitude" + std::to_string(i);
+      std::string phaseParam = "AlfvenCascade.phase" + std::to_string(i);
+      std::string angleParam = "AlfvenCascade.angle" + std::to_string(i);
+
+      RP::get(wavelengthParam, value);
       wavelengths.push_back(value);
       
-      RP::get("AlfvenCascade.amplitude", value);
+      RP::get(amplitudeParam, value);
       amplitudes.push_back(value);
       
-      RP::get("AlfvenCascade.phase", value);
+      RP::get(phaseParam, value);
       phases.push_back(value);
       
-      RP::get("AlfvenCascade.angle", value);
+      RP::get(angleParam, value);
       angles.push_back(value);
    }
 
