@@ -131,7 +131,7 @@ void AlfvenCascade::getParameters() {
 
    // Read each parameter multiple times
    Real value;
-   for (int i = 0; i < nWaves; i++) {
+   for (int i = 1; i <= nWaves; i++) {
       std::string wavelengthParam = "AlfvenCascade.wavelength" + std::to_string(i);
       std::string amplitudeParam = "AlfvenCascade.amplitude" + std::to_string(i);
       std::string phaseParam = "AlfvenCascade.phase" + std::to_string(i);
