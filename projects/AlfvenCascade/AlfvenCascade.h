@@ -63,6 +63,7 @@ protected:
    Real p0;      // Thermal pressure
    Real n;       // Number density
    Real VA;      // Alfvén speed
+   
    Real wavelength1;
    Real amplitude1;
    Real phase1;
