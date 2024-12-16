@@ -65,7 +65,7 @@ bool AlfvenCascade::initialize(void) {
    
    // Initialize waves based on parameters
    waves.clear();
-   for (size_t i = 0; i < wavelengths.size(); i++) {
+   for (size_t i = 1; i <= wavelengths.size(); i++) {
        WaveParameters wave;
        wave.wavelength = wavelengths[i];
        wave.amplitude = amplitudes[i];
@@ -102,11 +102,27 @@ bool AlfvenCascade::initialize(void) {
 void AlfvenCascade::addParameters() {
    typedef Readparameters RP;
    
-   RP::add("AlfvenCascade.numberOfWaves", "Number of waves in the simulation", 1);
+   RP::add("AlfvenCascade.numberOfWaves", "Number of waves in the simulation", 4);
+
    RP::add("AlfvenCascade.wavelength1", "Wavelength of wave (m)", 32.0);
    RP::add("AlfvenCascade.amplitude1", "Velocity amplitude (m/s)", 0.1);
    RP::add("AlfvenCascade.phase1", "Initial phase (rad)", 0.0);
    RP::add("AlfvenCascade.angle1", "Wave angle (rad)", 0.4636476090008061);
+
+   RP::add("AlfvenCascade.wavelength2", "Wavelength of wave (m)", 32.0);
+   RP::add("AlfvenCascade.amplitude2", "Velocity amplitude (m/s)", 0.1);
+   RP::add("AlfvenCascade.phase2", "Initial phase (rad)", 0.0);
+   RP::add("AlfvenCascade.angle2", "Wave angle (rad)", 0.4636476090008061);
+
+   RP::add("AlfvenCascade.wavelength3", "Wavelength of wave (m)", 32.0);
+   RP::add("AlfvenCascade.amplitude3", "Velocity amplitude (m/s)", 0.1);
+   RP::add("AlfvenCascade.phase3", "Initial phase (rad)", 0.0);
+   RP::add("AlfvenCascade.angle3", "Wave angle (rad)", 0.4636476090008061);
+
+   RP::add("AlfvenCascade.wavelength4", "Wavelength of wave (m)", 32.0);
+   RP::add("AlfvenCascade.amplitude4", "Velocity amplitude (m/s)", 0.1);
+   RP::add("AlfvenCascade.phase4", "Initial phase (rad)", 0.0);
+   RP::add("AlfvenCascade.angle4", "Wave angle (rad)", 0.4636476090008061);
    
    RP::add("AlfvenCascade.rho0", "Background density (kg/m^3)", 1.6726219e-21);
    RP::add("AlfvenCascade.B", "Background magnetic field strength (T)", 1e-8);
@@ -136,6 +152,11 @@ void AlfvenCascade::getParameters() {
       std::string amplitudeParam = "AlfvenCascade.amplitude" + std::to_string(i);
       std::string phaseParam = "AlfvenCascade.phase" + std::to_string(i);
       std::string angleParam = "AlfvenCascade.angle" + std::to_string(i);
+
+      std::cout << wavelengthParam << "\n";
+      std::cout << amplitudeParam << "\n";
+      std::cout << phaseParam << "\n";
+      std::cout << angleParam << "\n";
 
       RP::get(wavelengthParam, value);
       wavelengths.push_back(value);
