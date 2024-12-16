@@ -159,17 +159,17 @@ void AlfvenCascade::getParameters() {
       std::cout << phaseParam << "\n";
       std::cout << angleParam << "\n";
 
-      RP::get("AlfvenCascade." + wavelengthParam, wavelengthParam);
-      wavelengths.push_back(wavelengthParam);
+      RP::get("AlfvenCascade." + wavelengthParam, value);
+      wavelengths.push_back(value);
       
-      RP::get("AlfvenCascade." + amplitudeParam, amplitudeParam);
-      amplitudes.push_back(amplitudeParam);
+      RP::get("AlfvenCascade." + amplitudeParam, value);
+      amplitudes.push_back(value);
       
-      RP::get("AlfvenCascade." + phaseParam, phaseParam);
-      phases.push_back(phaseParam);
+      RP::get("AlfvenCascade." + phaseParam, value);
+      phases.push_back(value);
       
-      RP::get("AlfvenCascade." + angleParam, angleParam);
-      angles.push_back(angleParam);
+      RP::get("AlfvenCascade." + angleParam, value);
+      angles.push_back(value);
    }
 
    // Get scalar parameters

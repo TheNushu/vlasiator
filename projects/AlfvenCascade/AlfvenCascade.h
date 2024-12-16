@@ -63,6 +63,25 @@ protected:
    Real p0;      // Thermal pressure
    Real n;       // Number density
    Real VA;      // Alfvén speed
+   Real wavelength1;
+   Real amplitude1;
+   Real phase1;
+   Real angle1;
+   
+   Real wavelength2;
+   Real amplitude2;
+   Real phase2;
+   Real angle2;
+   
+   Real wavelength3;
+   Real amplitude3;
+   Real phase3;
+   Real angle3;
+   
+   Real wavelength4;
+   Real amplitude4;
+   Real phase4;
+   Real angle4;
 
    // Turbulence parameters
    std::vector<Real> wavelengths;  // Vector of wavelengths
