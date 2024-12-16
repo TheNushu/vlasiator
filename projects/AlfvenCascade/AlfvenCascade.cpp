@@ -102,17 +102,13 @@ bool AlfvenCascade::initialize(void) {
 void AlfvenCascade::addParameters() {
    typedef Readparameters RP;
    
-   // For vectors, we need to use std::vector for the default << values
-   std::vector<Real> defaultWavelengths = {32.0};
-   std::vector<Real> defaultAmplitudes = {0.1};
-   std::vector<Real> defaultPhases = {0.0};
-   std::vector<Real> defaultAngles = {0.4636476090008061};
-   
+   // For repeated parameters, just add the base parameter once
    RP::add("AlfvenCascade.numberOfWaves", "Number of waves in the simulation", 1);
-   RP::add("AlfvenCascade.wavelengths", "Vector of wavelengths (m)", defaultWavelengths);
-   RP::add("AlfvenCascade.amplitudes", "Vector of velocity amplitudes (m/s)", defaultAmplitudes);
-   RP::add("AlfvenCascade.phases", "Vector of initial phases (rad)", defaultPhases);
-   RP::add("AlfvenCascade.angles", "Vector of wave angles (rad)", defaultAngles);
+   RP::add("AlfvenCascade.wavelength", "Wavelength of wave (m)", 32.0);
+   RP::add("AlfvenCascade.amplitude", "Velocity amplitude (m/s)", 0.1);
+   RP::add("AlfvenCascade.phase", "Initial phase (rad)", 0.0);
+   RP::add("AlfvenCascade.angle", "Wave angle (rad)", 0.4636476090008061);
+   
    RP::add("AlfvenCascade.rho0", "Background density (kg/m^3)", 1.6726219e-21);
    RP::add("AlfvenCascade.B", "Background magnetic field strength (T)", 1e-8);
    RP::add("AlfvenCascade.T", "Temperature (K)", 1e6);
@@ -122,15 +118,35 @@ void AlfvenCascade::addParameters() {
 }
 
 void AlfvenCascade::getParameters() {
-   Project::getParameters();
    typedef Readparameters RP;
-   
+   Project::getParameters();
+
    int nWaves;
    RP::get("AlfvenCascade.numberOfWaves", nWaves);
-   RP::get("AlfvenCascade.wavelengths", wavelengths);
-   RP::get("AlfvenCascade.amplitudes", amplitudes);
-   RP::get("AlfvenCascade.phases", phases);
-   RP::get("AlfvenCascade.angles", angles);
+
+   // Clear vectors in case they have any default values
+   wavelengths.clear();
+   amplitudes.clear();
+   phases.clear();
+   angles.clear();
+
+   // Read each parameter multiple times
+   Real value;
+   for (int i = 0; i < nWaves; i++) {
+      RP::get("AlfvenCascade.wavelength", value);
+      wavelengths.push_back(value);
+      
+      RP::get("AlfvenCascade.amplitude", value);
+      amplitudes.push_back(value);
+      
+      RP::get("AlfvenCascade.phase", value);
+      phases.push_back(value);
+      
+      RP::get("AlfvenCascade.angle", value);
+      angles.push_back(value);
+   }
+
+   // Get scalar parameters
    RP::get("AlfvenCascade.rho0", rho0);
    RP::get("AlfvenCascade.B", B);
    RP::get("AlfvenCascade.T", T);
