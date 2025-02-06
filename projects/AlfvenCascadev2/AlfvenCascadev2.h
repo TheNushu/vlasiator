@@ -26,10 +26,10 @@
 #include "../projectTriAxisSearch.h"
 
 namespace projects {
-class MultiCircularAlfven : public TriAxisSearch {
+class AlfvenCascadev2 : public TriAxisSearch {
 public:
-   MultiCircularAlfven();
-   virtual ~MultiCircularAlfven();
+   AlfvenCascadev2();
+   virtual ~AlfvenCascadev2();
 
    virtual bool initialize();
    static void addParameters();
@@ -54,7 +54,7 @@ protected:
    Real v1;                       // Perturbation amplitude (m/s)
    Real eta;                      // Resistivity (Ω·m)
    Real kwave;                    // Wavenumber (1/m)
-   Real cosalpha, sinalpha;       # Wavevector angle
+   Real cosalpha, sinalpha;       // Wavevector angle
    bool verbose;
 };
 } // namespace projects
